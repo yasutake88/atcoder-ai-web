@@ -49,7 +49,7 @@ class UITests(unittest.TestCase):
         a.text_area(key='problem').set_value('A+Bを出力').run()
         a.text_input(key='api_key').set_value('test-key').run()
         a.checkbox[-1].check().run()
-        with patch('core.generate', return_value=('解答\nprint(3)',None)) as g:
+        with patch('core.generate', return_value=('解答\nprint(3)',None,True)) as g:
             next(b for b in a.button if b.label=='実行する').click().run(timeout=30)
             self.assertEqual(g.call_count,1)
             self.assertIn('すべての変数',g.call_args.args[3])
@@ -70,7 +70,7 @@ class UITests(unittest.TestCase):
         next(w for w in a.selectbox if w.label=='AtCoderの判定').set_value('AC').run()
         a.text_input(key='api_key').set_value('test-key').run()
         a.checkbox[-1].check().run()
-        with patch('core.generate', return_value=('回答',None)) as g, patch('pdf_output.pdf_bytes', side_effect=RuntimeError('secret')):
+        with patch('core.generate', return_value=('回答',None,True)) as g, patch('pdf_output.pdf_bytes', side_effect=RuntimeError('secret')):
             next(b for b in a.button if b.label=='実行する').click().run()
             self.assertEqual(g.call_count,1)
             self.assertIn('判定はACですが',g.call_args.args[3])

@@ -23,7 +23,7 @@ def parse_problem(page):
     title = tree.xpath('//title/text()')
     return (title[0] if title else "AtCoder"), text
 
-def usage_cost(provider, usage, prices):
+def usage_cost(provider, usage, prices, yen_rate=None):
     if usage is None:
         return "推定API料金は算出できません（使用量が返されませんでした）。"
     if provider == "Gemini":
@@ -50,7 +50,9 @@ def usage_cost(provider, usage, prices):
     count = cached or 0
     cost = ((inputs-count)*prices[0] + count*prices[1] + outputs*prices[2])/1_000_000
     note = "・キャッシュ不明のため割引なしで概算" if cached is None else ""
-    return details + f"\n今回の推定API料金 US＄{cost:.7f}（税・為替換算を含まない概算{note}）"
+    yen = '' if yen_rate is None else f'（約{cost * yen_rate:,.2f}円）'
+    rate = '' if yen_rate is None else f'\n換算レート：1ドル＝{yen_rate:,}円'
+    return details + f"\n今回の推定API料金 US＄{cost:.7f}{yen}（税・決済手数料を含まない概算{note}）" + rate
 import re
 from urllib.parse import urlparse
 import requests
@@ -77,7 +79,7 @@ def fetch_problem(url):
                 raise ValueError('ページが大きすぎます。')
     return parse_problem(data.decode('utf-8'))
 
-def generate(provider, model, key, prompt, thinking, limit):
+def generate(provider, model, key, prompt, thinking, limit, *, with_status=False):
     if not key.strip():
         raise ValueError('APIキーを入力してください。')
     if not model.strip():
@@ -102,11 +104,13 @@ def generate(provider, model, key, prompt, thinking, limit):
                          max_output_tokens=limit, **kwargs)
     text = getattr(result, 'output_text', '') or ''
     status = str(getattr(result, 'status', ''))
+    countable = bool(text.strip()) and status == 'completed'
     if status in ('incomplete', 'failed', 'cancelled'):
         text += '\n\n【注意】回答が完了していません。出力上限やAPIの状態を確認してください。'
     if not text.strip():
         text = '本文が返りませんでした。出力上限、モデルの対応、APIの利用状況を確認してください。'
-    return text, getattr(result, 'usage', None)
+    response = (text, getattr(result, 'usage', None))
+    return (*response, countable) if with_status else response
 
 def safe_error(error):
     # Never show SDK exception bodies: they may contain user data or credentials.
