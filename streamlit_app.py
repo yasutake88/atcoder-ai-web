@@ -6,6 +6,24 @@ from core import MODELS, fetch_problem, generate, usage_cost, safe_error
 from prompts import REVIEW, SOLVE
 from pdf_output import pdf_bytes
 
+# Standard text API prices at original app creation (2026-11-04).
+# USD per 1M tokens: input, cached input, output (including reasoning).
+# Sources: https://ai.google.dev/gemini-api/docs/pricing
+#          https://developers.openai.com/api/docs/pricing
+DEFAULT_PRICES = {
+    'Gemini': {
+        'gemini-4-argon': (2.0, 0.1, 10.0),
+        'gemini-3.8-flash': (0.75, 0.075, 3.75),
+        'gemini-3.1-pro-preview': (2.0, 0.2, 12.0),
+    },
+    'OpenAI': {
+        'gpt-6.1-sol': (2.0, 0.1, 10.0),
+        'gpt-6.1-terra': (1.0, 0.05, 5.0),
+        'gpt-6-astra': (10.0, 1.0, 50.0),
+        'gpt-6-luna': (0.1, 0.01, 0.5),
+    },
+}
+
 st.set_page_config(page_title='AtCoder AI | レビューと解説', page_icon='📘', layout='centered')
 
 def clear_key():
@@ -75,9 +93,32 @@ with st.expander('思考設定・出力上限・料金の設定'):
     limit = st.number_input('最大出力トークン', min_value=1024, max_value=32768, value=16384, step=1024)
     st.caption('小さい上限では、思考にトークンを使って解答が途中で終わることがあります。')
     st.markdown('[Geminiの料金表](https://ai.google.dev/gemini-api/docs/pricing) · [OpenAIの料金表](https://developers.openai.com/api/docs/pricing)')
-    price_enabled = st.checkbox('公式料金表で単価を確認し、概算料金を計算する')
-    prices = [st.number_input(label + '（USD／100万トークン）', min_value=0.0, value=0.0, format='%.4f', key=provider + '_' + label) for label in ['通常入力', 'キャッシュ入力', '出力']]
-    st.caption('選択モデル・適用期間・入力の長さに合う単価を指定してください。未設定は0円と表示せず「算出不可」とします。')
+    custom_prices = st.checkbox('個別に単価を設定する', key='custom_prices')
+    defaults = DEFAULT_PRICES.get(provider, {}).get(model.strip())
+    prices = defaults
+    price_source = 'アプリ作成時点（2026-11-04）の登録単価'
+    st.caption('チェックなし：アプリ作成時点の単価で自動計算します。最新料金の自動取得は行いません。無料枠・クレジットは反映しません。')
+    if custom_prices:
+        price_source = '個別に設定した単価'
+        values = []
+        for i, label in enumerate(['通常入力', 'キャッシュ入力', '出力']):
+            # Preserve the existing cached-input step (Streamlit float default: 0.01).
+            options = {} if i == 1 else {'step': 0.1}
+            values.append(st.number_input(
+                label + '（USD／100万トークン）', min_value=0.0,
+                value=defaults[i] if defaults else None, format='%.4f',
+                key='manual_price_' + provider + '_' + model.strip() + '_' + label,
+                **options))
+        prices = tuple(values) if all(v is not None for v in values) else None
+        if prices is None or not any(prices):
+            prices = None
+            st.warning('単価未設定です。3項目を入力してください。すべて0の場合も料金は「算出不可」と表示します。')
+    elif defaults is not None:
+        st.write(f'登録単価（USD／100万トークン）：通常入力 {defaults[0]:g} ／ キャッシュ入力 {defaults[1]:g} ／ 出力 {defaults[2]:g}')
+    else:
+        st.warning('このモデルの登録単価はありません。「個別に単価を設定する」で入力してください。未設定のまま実行すると料金は「算出不可」になります。')
+    st.caption('登録単価は入力20万トークン以下を対象とします。Argonは2026年11月末まで、Flashは2026年12月末までの割引単価です。料金改定後は個別設定で変更してください。')
+
 consent = st.checkbox('このキーへの課金と、問題文・コードを選択したAIへ送信することに同意する')
 if st.button('実行する', type='primary', disabled=not consent):
     key = st.session_state.get('api_key', '').strip()
@@ -98,7 +139,12 @@ if st.button('実行する', type='primary', disabled=not consent):
                 answer, usage = generate(provider, model.strip(), key, prompt, thinking, int(limit))
             # Also redact accidental echoes before display/export.
             answer = answer.replace(key, '[APIキー非表示]')
-            amount = usage_cost(provider, usage, tuple(prices) if price_enabled else None)
+            amount = usage_cost(provider, usage, prices)
+            if prices is None:
+                amount += '\n単価未設定のため算出不可（無料という意味ではありません）。'
+            else:
+                amount += (f'\n計算単価：{price_source}'
+                           f'\n通常入力 {prices[0]:g} ／ キャッシュ入力 {prices[1]:g} ／ 出力 {prices[2]:g} USD／100万トークン')
             stamp = datetime.now(ZoneInfo('Asia/Tokyo')).strftime('%Y-%m-%d %H:%M:%S JST')
             report = f'AtCoder AI — {mode}\n{stamp}\n{provider} / {model}\nコード: {filename or "貼り付け／解答生成"}\n\n{answer}\n\n{amount}\n処理時間: {time.perf_counter()-started:.1f}秒\n'
             st.session_state['report'] = report
