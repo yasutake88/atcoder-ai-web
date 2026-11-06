@@ -1,0 +1,6 @@
+streamlit==1.66.1
+google-genai==2.34.0
+openai==2.54.0
+PyMuPDF==1.26.6
+lxml==6.1.1
+requests==2.34.2
