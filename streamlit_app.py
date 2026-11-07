@@ -26,7 +26,7 @@ DEFAULT_PRICES = {
     },
 }
 
-st.set_page_config(page_title='Study Helper AI for AtCoder', page_icon='📘', layout='centered')
+st.set_page_config(page_title='AI Study Helper for AtCoder', page_icon='📘', layout='centered')
 
 def clear_key():
     st.session_state['api_key'] = ''
@@ -36,7 +36,7 @@ def reset_all():
 
 counter_config = load_counter_config(st.secrets)
 
-st.title('Study Helper AI for AtCoder')
+st.title('AI Study Helper for AtCoder')
 st.markdown('コードレビューと、アルゴリズム・解答のやさしい解説')
 st.markdown(':red[※ 個人が開発・運営する非公式ツールです。AtCoder株式会社とは一切関係ありません。]')
 st.caption('更新版：2026-11-07.1（エラー診断対応）')
