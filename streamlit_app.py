@@ -26,7 +26,7 @@ DEFAULT_PRICES = {
     },
 }
 
-st.set_page_config(page_title='AtCoder AI | レビューと解説', page_icon='📘', layout='centered')
+st.set_page_config(page_title='Study Helper AI for AtCoder', page_icon='📘', layout='centered')
 
 def clear_key():
     st.session_state['api_key'] = ''
@@ -36,9 +36,10 @@ def reset_all():
 
 counter_config = load_counter_config(st.secrets)
 
-st.title('AtCoder AI')
+st.title('Study Helper AI for AtCoder')
+st.markdown('コードレビューと、アルゴリズム・解答のやさしい解説')
+st.markdown(':red[※ 個人が開発・運営する非公式ツールです。AtCoder株式会社とは関係ありません。]')
 st.caption('更新版：2026-11-07.1（エラー診断対応）')
-st.caption('問題を読む → AIを選ぶ → レビュー・解答解説をPDFで保存')
 st.info('各自のAPIキーで利用する公開アプリです。入力したキーの所有者にAPI料金が発生します。')
 with st.expander('データの扱い・利用について'):
     st.write('キーはこの接続のメモリー内で扱い、アプリからファイル・ログ・共通キャッシュに保存しません。問題文と提出コードは選択したAI事業者に送信します。キーはこのアプリのサーバーを経由します。AI事業者側の保持・利用条件は各社の規約に従います。')
