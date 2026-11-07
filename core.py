@@ -112,9 +112,44 @@ def generate(provider, model, key, prompt, thinking, limit, *, with_status=False
     response = (text, getattr(result, 'usage', None))
     return (*response, countable) if with_status else response
 
+def error_metadata(error):
+    """Return only bounded diagnostic labels, never exception messages or bodies."""
+    known = {
+        'TimeoutError', 'ReadTimeout', 'ConnectTimeout', 'WriteTimeout',
+        'PoolTimeout', 'APITimeoutError', 'TimeoutException',
+        'ConnectionError', 'ConnectError', 'ReadError', 'WriteError',
+        'RemoteProtocolError', 'APIConnectionError', 'NetworkError',
+        'HTTPStatusError', 'ClientError', 'ServerError', 'APIError',
+        'BadRequestError', 'AuthenticationError', 'PermissionDeniedError',
+        'RateLimitError', 'NotFoundError', 'InternalServerError',
+        'GenAiDefaultError', 'CreateInteractionClientError',
+        'CreateInteractionServerError', 'APIResponseValidationError',
+        'ValidationError', 'TypeError', 'ValueError', 'AttributeError',
+        'KeyError', 'ImportError', 'ModuleNotFoundError', 'RuntimeError',
+    }
+    names, statuses, seen = [], [], set()
+    current = error
+    while current is not None and id(current) not in seen and len(seen) < 6:
+        seen.add(id(current))
+        name = type(current).__name__
+        names.append(name if name in known else 'OtherError')
+        for obj in (current, getattr(current, 'response', None),
+                    getattr(current, 'http_res', None)):
+            for attr in ('status_code', 'code'):
+                value = getattr(obj, attr, None)
+                if isinstance(value, str) and re.fullmatch(r'[1-5][0-9]{2}', value):
+                    value = int(value)
+                if type(value) is int and 100 <= value <= 599:
+                    statuses.append(value)
+        current = current.__cause__ or (
+            None if current.__suppress_context__ else current.__context__)
+    return names, statuses[0] if statuses else None
+
+
 def safe_error(error):
-    # Never show SDK exception bodies: they may contain user data or credentials.
-    status = getattr(error, 'status_code', getattr(error, 'code', None))
+    names, status = error_metadata(error)
+    if any('Timeout' in name for name in names) or status in (408, 504):
+        return '応答待ちが時間切れになりました。AI側で処理が続いている可能性があります。'
     if status in (401, 403):
         return '認証または権限エラーです。キーとモデルの利用権限を確認してください。'
     if status == 429:
@@ -123,4 +158,22 @@ def safe_error(error):
         return 'リクエストが拒否されました。モデルID、思考設定、問題文を確認してください。安全フィルターが原因の場合もあります。'
     if status == 404:
         return 'モデルが見つかりません。利用可能なモデルIDを指定してください。'
-    return '通信またはAPI処理に失敗しました。自動再送はしていません。再実行の前にAPI側の使用量を確認してください。'
+    if status is not None and status >= 500:
+        return 'API側または通信経路のサーバーでエラーが発生しました。'
+    if any(name in {'ConnectionError', 'ConnectError', 'ReadError', 'WriteError',
+                    'RemoteProtocolError', 'APIConnectionError', 'NetworkError'} for name in names):
+        return 'APIへの接続または応答の受信中に通信エラーが発生しました。'
+    if any(name in {'TypeError', 'ValueError', 'AttributeError', 'KeyError',
+                    'ImportError', 'ModuleNotFoundError', 'ValidationError',
+                    'APIResponseValidationError'} for name in names):
+        return 'アプリまたはAPIライブラリで、設定・応答データの処理に失敗しました。'
+    return '処理に失敗しました。下の診断情報で原因を確認してください。'
+
+
+def diagnostic_text(error, stage, elapsed):
+    names, status = error_metadata(error)
+    stages = {'api': 'AIへの依頼・応答の受信', 'cost': '回答の処理・料金計算',
+              'report': '結果の表示準備'}
+    return (f"診断版：2026-11-07.1\n発生箇所：{stages.get(stage, 'その他')}"
+            f"\n経過時間：{elapsed:.1f}秒\nエラー種別：{' → '.join(names)}"
+            f"\nHTTPステータス：{status if status is not None else '取得なし'}")

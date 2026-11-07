@@ -3,7 +3,7 @@ from uuid import uuid4
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import streamlit as st
-from core import MODELS, fetch_problem, generate, usage_cost, safe_error
+from core import MODELS, fetch_problem, generate, usage_cost, safe_error, diagnostic_text
 from prompts import REVIEW, SOLVE
 from pdf_output import pdf_bytes
 from counter import load_counter_config, configured, classify, record_success, counts_text
@@ -37,6 +37,7 @@ def reset_all():
 counter_config = load_counter_config(st.secrets)
 
 st.title('AtCoder AI')
+st.caption('更新版：2026-11-07.1（エラー診断対応）')
 st.caption('問題を読む → AIを選ぶ → レビュー・解答解説をPDFで保存')
 st.info('各自のAPIキーで利用する公開アプリです。入力したキーの所有者にAPI料金が発生します。')
 with st.expander('データの扱い・利用について'):
@@ -154,9 +155,11 @@ if st.button('実行する', type='primary', disabled=not consent):
         started = time.perf_counter()
         st.session_state.pop('report', None)
         st.session_state.pop('pdf', None)
+        stage = 'api'
         try:
             with st.spinner('AIが考えています。画面を閉じずにお待ちください…'):
                 answer, usage, countable = generate(provider, model.strip(), key, prompt, thinking, int(limit), with_status=True)
+            stage = 'cost'
             # Also redact accidental echoes before display/export.
             answer = answer.replace(key, '[APIキー非表示]')
             amount = usage_cost(provider, usage, prices, yen_rate)
@@ -165,6 +168,7 @@ if st.button('実行する', type='primary', disabled=not consent):
             else:
                 amount += (f'\n計算単価：{price_source}'
                            f'\n通常入力 {prices[0]:g} ／ キャッシュ入力 {prices[1]:g} ／ 出力 {prices[2]:g} USD／100万トークン')
+            stage = 'report'
             stamp = datetime.now(ZoneInfo('Asia/Tokyo')).strftime('%Y-%m-%d %H:%M:%S JST')
             request_id = str(uuid4())
             count_message = '累計依頼回数：未設定（保存先の設定後から記録します）'
@@ -187,6 +191,9 @@ if st.button('実行する', type='primary', disabled=not consent):
             st.session_state['download_name'] = 'atcoder_' + datetime.now().strftime('%Y%m%d_%H%M%S')
         except Exception as error:
             st.error(safe_error(error))
+            st.code(diagnostic_text(error, stage, time.perf_counter() - started), language=None)
+            st.caption('診断情報にはAPIキーや問題文を含めていません。この欄をコピーして問い合わせできます。')
+            st.warning('自動再送はしていません。課金の有無はこのエラーだけでは分かりません。再実行前にAPI側の使用量を確認してください。')
         finally:
             key = ''
 
