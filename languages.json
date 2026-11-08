@@ -1,0 +1,474 @@
+{
+  "source": "https://img.atcoder.jp/file/language-update/2025-10/language-list.html",
+  "checked": "2026-11-08",
+  "languages": [
+    {
+      "name": "><> (fishr 0.1.0)",
+      "filename": "Main.fish"
+    },
+    {
+      "name": "APL (GNU APL 1.9)",
+      "filename": "Main.apl"
+    },
+    {
+      "name": "AWK (GNU awk 5.2.1)",
+      "filename": "Main.awk"
+    },
+    {
+      "name": "Ada 2022 (GNAT 15.2.0)",
+      "filename": "src/main.adb"
+    },
+    {
+      "name": "Assembly MIPS O32 ABI (GNU assembler 2.42)",
+      "filename": "Main.s"
+    },
+    {
+      "name": "Assembly x64 (NASM 2.16.03)",
+      "filename": "Main.asm"
+    },
+    {
+      "name": "A言語 (interpreter af48a2a)",
+      "filename": "Main.a"
+    },
+    {
+      "name": "BASIC (FreeBASIC 1.10.1)",
+      "filename": "Main.bas"
+    },
+    {
+      "name": "Bash (bash 5.3)",
+      "filename": "Main.bash"
+    },
+    {
+      "name": "Befunge93 (TBC 1.0)",
+      "filename": "Main.bf"
+    },
+    {
+      "name": "Brainfuck (Tritium 1.2.73)",
+      "filename": "Main.bf"
+    },
+    {
+      "name": "C# 13.0 (.NET 9.0.8)",
+      "filename": "Main.cs"
+    },
+    {
+      "name": "C# 13.0 (.NET Native AOT 9.0.8)",
+      "filename": "Main.cs"
+    },
+    {
+      "name": "C++ IOI-Style(GNU++20) (GCC 14.2.0)",
+      "filename": "Main.cpp"
+    },
+    {
+      "name": "C++23 (Clang 21.1.0)",
+      "filename": "Main.cpp"
+    },
+    {
+      "name": "C++23 (GCC 15.2.0)",
+      "filename": "Main.cpp"
+    },
+    {
+      "name": "C23 (Clang 21.1.0)",
+      "filename": "Main.c"
+    },
+    {
+      "name": "C23 (GCC 14.2.0)",
+      "filename": "Main.c"
+    },
+    {
+      "name": "C3 (c3c 0.7.5)",
+      "filename": "Main.c3"
+    },
+    {
+      "name": "COBOL (Free) (GnuCOBOL 3.2)",
+      "filename": "Main.cbl"
+    },
+    {
+      "name": "Carp(Carp 0.5.5)",
+      "filename": "Main.carp"
+    },
+    {
+      "name": "Clojure (Clojure AOT 1.12.2)",
+      "filename": "main/src/main/core.clj"
+    },
+    {
+      "name": "Clojure (ClojureScript 1.12.42 (Clojure 1.12.2 Node.js 22.19.0))",
+      "filename": "main/src/main/core.cljs"
+    },
+    {
+      "name": "Clojure (babashka 1.12.208)",
+      "filename": "Main.clj"
+    },
+    {
+      "name": "Clojure (clojure 1.12.2)",
+      "filename": "Main.clj"
+    },
+    {
+      "name": "Common Lisp (SBCL 2.5.8)",
+      "filename": "Main.lisp"
+    },
+    {
+      "name": "Crystal (Crystal 1.17.0)",
+      "filename": "main/src/main.cr"
+    },
+    {
+      "name": "Cyber (Cyber v0.3)",
+      "filename": "Main.cy"
+    },
+    {
+      "name": "D (DMD 2.111.0)",
+      "filename": "source/app.d"
+    },
+    {
+      "name": "D (GDC 15.2)",
+      "filename": "source/app.d"
+    },
+    {
+      "name": "D (LDC 1.41.0)",
+      "filename": "source/app.d"
+    },
+    {
+      "name": "Dart (Dart 3.9.2)",
+      "filename": "judge/bin/judge.dart"
+    },
+    {
+      "name": "ECLiPSe (ECLiPSe 7.1_13)",
+      "filename": "Main.ecl"
+    },
+    {
+      "name": "Eiffel (Gobo Eiffel 22.01)",
+      "filename": "main.e"
+    },
+    {
+      "name": "Eiffel (Liberty Eiffel 07829e3)",
+      "filename": "main.e"
+    },
+    {
+      "name": "Elixir (Elixir 1.18.4 (OTP 28.0.2))",
+      "filename": "main/lib/main.ex"
+    },
+    {
+      "name": "Emacs Lisp(Native Compile)(GNU Emacs 29.4)",
+      "filename": "Main.el"
+    },
+    {
+      "name": "Emojicode 1.0 beta 2 (emojicodec 1.0 beta 2)",
+      "filename": "Main.🍇"
+    },
+    {
+      "name": "Erlang (Erlang 28.0.2)",
+      "filename": "Main.erl"
+    },
+    {
+      "name": "F# 9.0 (.NET 9.0.8)",
+      "filename": "Main.fs"
+    },
+    {
+      "name": "FORTRAN77 (GCC 14.2.0)",
+      "filename": "Main.f"
+    },
+    {
+      "name": "Factor (Factor 0.100)",
+      "filename": "Main.factor"
+    },
+    {
+      "name": "Fish (fish 4.0.2)",
+      "filename": "Main.fish"
+    },
+    {
+      "name": "Fix (1.1.0-alpha.12)",
+      "filename": "main.fix"
+    },
+    {
+      "name": "Forth (gforth 0.7.3)",
+      "filename": "Main.fs"
+    },
+    {
+      "name": "Fortran2018 (Flang 20.1.7)",
+      "filename": "Main.f90"
+    },
+    {
+      "name": "Fortran2023 (GCC 14.2.0)",
+      "filename": "Main.f90"
+    },
+    {
+      "name": "Gleam (Gleam 1.12.0 (OTP 28.0.2))",
+      "filename": "src/judge.gleam"
+    },
+    {
+      "name": "Go (go 1.25.1)",
+      "filename": "main.go"
+    },
+    {
+      "name": "Go 1.18 (gccgo 15.2.0)",
+      "filename": "main.go"
+    },
+    {
+      "name": "Haskell (GHC 9.8.4)",
+      "filename": "submission/app/Main.hs"
+    },
+    {
+      "name": "Haxe/JVM 4.3.7 (hxjava 4.2.0)",
+      "filename": "Main.hx"
+    },
+    {
+      "name": "ISLisp (Easy-ISLisp 5.43)",
+      "filename": "main.lsp"
+    },
+    {
+      "name": "Java24 (OpenJDK 24.0.2)",
+      "filename": "Main.java"
+    },
+    {
+      "name": "JavaScript (Bun 1.2.21)",
+      "filename": "Main.js"
+    },
+    {
+      "name": "JavaScript (Deno 2.4.5)",
+      "filename": "Main.js"
+    },
+    {
+      "name": "JavaScript (Node.js 22.19.0)",
+      "filename": "Main.js"
+    },
+    {
+      "name": "Jule (jule 0.1.6)",
+      "filename": "Main.jule"
+    },
+    {
+      "name": "Julia (Julia 1.11.6)",
+      "filename": "Main.jl"
+    },
+    {
+      "name": "Koka (koka v3.2.2)",
+      "filename": "main.kk"
+    },
+    {
+      "name": "Kotlin (Kotlin/JVM 2.2.10)",
+      "filename": "Main.kt"
+    },
+    {
+      "name": "Kuin (kuincl v.2021.8.17)",
+      "filename": "main.kn"
+    },
+    {
+      "name": "LLVM IR (Clang 21.1.0)",
+      "filename": "Main.ll"
+    },
+    {
+      "name": "Lazy K (irori v1.0.0)",
+      "filename": "Main.lazy"
+    },
+    {
+      "name": "Lean (lean v4.22.0)",
+      "filename": "atcoder/Main.lean"
+    },
+    {
+      "name": "Lua (Lua 5.4.7)",
+      "filename": "Main.lua"
+    },
+    {
+      "name": "Lua (LuaJIT 2.1.1703358377)",
+      "filename": "Main.lua"
+    },
+    {
+      "name": "Mercury (Mercury 22.01.8)",
+      "filename": "main.m"
+    },
+    {
+      "name": "Nim (Nim 1.6.20)",
+      "filename": "Main.nim"
+    },
+    {
+      "name": "Nim (Nim 2.2.4)",
+      "filename": "Main.nim"
+    },
+    {
+      "name": "OCaml (ocamlopt 5.3.0)",
+      "filename": "main.ml"
+    },
+    {
+      "name": "Octave (GNU Octave 10.2.0)",
+      "filename": "Main.m"
+    },
+    {
+      "name": "PHP (PHP 8.4.12)",
+      "filename": "Main.php"
+    },
+    {
+      "name": "Pascal (fpc 3.2.2)",
+      "filename": "Main.p"
+    },
+    {
+      "name": "Perl (perl 5.38.2)",
+      "filename": "Main.pl"
+    },
+    {
+      "name": "Piet (your-diary/piet_programming_language 3.0.0) (PPM image)",
+      "filename": "Main.ppm"
+    },
+    {
+      "name": "Pony (ponyc 0.59.0)",
+      "filename": "Main.pony"
+    },
+    {
+      "name": "PowerShell (PowerShell 7.5.2)",
+      "filename": "Main.ps1"
+    },
+    {
+      "name": "Prolog (SWI-Prolog 9.2.9)",
+      "filename": "Main.pl"
+    },
+    {
+      "name": "Python (CPython 3.13.7)",
+      "filename": "Main.py"
+    },
+    {
+      "name": "Python (Codon 0.19.3)",
+      "filename": "Main.py"
+    },
+    {
+      "name": "Python (PyPy 3.11-v7.3.20)",
+      "filename": "Main.py"
+    },
+    {
+      "name": "R (GNU R 4.5.0)",
+      "filename": "Main.R"
+    },
+    {
+      "name": "ReasonML (reson 3.16.0)",
+      "filename": "main/bin/main.re"
+    },
+    {
+      "name": "Ruby 3.3 (truffleruby 25.0.0)",
+      "filename": "Main.rb"
+    },
+    {
+      "name": "Ruby 3.4 (ruby 3.4.5)",
+      "filename": "Main.rb"
+    },
+    {
+      "name": "Rust (rustc 1.89.0)",
+      "filename": "src/main.rs"
+    },
+    {
+      "name": "SQL (DuckDB 1.3.2)",
+      "filename": "Main.sql"
+    },
+    {
+      "name": "SageMath (SageMath 10.7)",
+      "filename": "Main.sage"
+    },
+    {
+      "name": "Scala (Dotty 3.7.2)",
+      "filename": "Main.scala"
+    },
+    {
+      "name": "Scala 3.7.2 (Scala Native 0.5.8)",
+      "filename": "main/src/main/scala/Main.scala"
+    },
+    {
+      "name": "Scheme (ChezScheme 10.2.0)",
+      "filename": "Main.scm"
+    },
+    {
+      "name": "Scheme (Gauche 0.9.15)",
+      "filename": "Main.scm"
+    },
+    {
+      "name": "Seed7 (Seed7 3.5.0)",
+      "filename": "Main.sd7"
+    },
+    {
+      "name": "Swift 6.2",
+      "filename": "Package/Sources/main.swift"
+    },
+    {
+      "name": "Tcl (tclsh 9.0.1)",
+      "filename": "Main.tcl"
+    },
+    {
+      "name": "TeX (tex 3.141592653)",
+      "filename": "Main.tex"
+    },
+    {
+      "name": "Terra (Terra 1.2.0)",
+      "filename": "Main.t"
+    },
+    {
+      "name": "Text (cat 9.4)",
+      "filename": "Main.text"
+    },
+    {
+      "name": "TypeScript 5.8 (Deno 2.4.5)",
+      "filename": "Main.ts"
+    },
+    {
+      "name": "TypeScript 5.9 (tsc 5.9.2 (Bun 1.2.21))",
+      "filename": "Main.ts"
+    },
+    {
+      "name": "TypeScript 5.9 (tsc 5.9.2 (Node.js 22.19.0))",
+      "filename": "Main.ts"
+    },
+    {
+      "name": "Uiua (uiua 0.16.2)",
+      "filename": "Main.ua"
+    },
+    {
+      "name": "Unison (Unison 0.5.47)",
+      "filename": "main.u"
+    },
+    {
+      "name": "V (0.4.10)",
+      "filename": "Main.v"
+    },
+    {
+      "name": "Vala (valac 0.56.18)",
+      "filename": "Main.vala"
+    },
+    {
+      "name": "Verilog 2012 (Icarus Verilog 12.0)",
+      "filename": "Main.v"
+    },
+    {
+      "name": "Veryl (veryl 0.16.4)",
+      "filename": "main/src/main.veryl"
+    },
+    {
+      "name": "Visual Basic 16.9 (.NET 9.0.8)",
+      "filename": "Main.vb"
+    },
+    {
+      "name": "WebAssembly (wabt 1.0.34 + iwasm 2.4.1)",
+      "filename": "Main.wat"
+    },
+    {
+      "name": "Whitespace (whitespacers 1.3.0)",
+      "filename": "Main.ws"
+    },
+    {
+      "name": "Zig (Zig 0.15.1)",
+      "filename": "src/main.zig"
+    },
+    {
+      "name": "bc (GNU bc 1.08.2)",
+      "filename": "Main.bc"
+    },
+    {
+      "name": "cLay (cLay 20250308-1 (GCC 15.2.0))",
+      "filename": "main.clay"
+    },
+    {
+      "name": "dc 1.5.2 (GNU bc 1.08.2)",
+      "filename": "Main.dc"
+    },
+    {
+      "name": "なでしこ (cnako3 3.7.8 (Node.js 22.19.0))",
+      "filename": "Main.nako3"
+    },
+    {
+      "name": "プロデル (mono版プロデル 2.0.1353)",
+      "filename": "produire-mono/Main.rdr"
+    }
+  ]
+}
