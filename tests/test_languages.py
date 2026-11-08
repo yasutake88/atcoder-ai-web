@@ -11,6 +11,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class LanguageTests(unittest.TestCase):
+    def setUp(self):
+        patcher = patch('budget_display.rpc', return_value=dict(month='2026-11', monthly_micro_usd=5000000, used_micro_usd=0, enabled=True))
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
     def test_every_runtime_in_both_prompt_modes(self):
         self.assertEqual(len(LANGUAGES), 117)
         for language, filename in LANGUAGES.items():

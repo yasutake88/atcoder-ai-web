@@ -1,4 +1,5 @@
 import time
+from budget_display import show_balance
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import streamlit as st
@@ -15,6 +16,9 @@ st.markdown(':red[※ 個人が開発・運営する非公式ツールです。A
 st.write('APIキー不要の公開版')
 st.write('コードレビューと、アルゴリズム・解答のやさしい解説')
 st.info(f'{MODEL} ／ 思考の深さ high（固定）。利用者への請求はありません。月の利用枠がなくなると翌月まで受付を停止します。')
+balance_slot = st.empty()
+st.caption('残額は1ドル＝160円の概算です。実行中・使用量未確認の依頼の確保額を差し引いています。画面操作・再読み込みで更新します。')
+st.button('残額を更新')
 st.caption('問題文・コードをGoogleのAIに送信します。回答の正しさやACは保証しません。コードの実行・自動提出は行いません。')
 with st.expander('データの扱い'):
     st.write('入力と回答は接続中のメモリーに保持します。Google側の保持・利用は契約条件によります。データベースには依頼ID・日時・管理者区分・予算計算額・完了状況を保存し、問題文や回答、APIキーは保存しません。累計は既存アプリと共通です。')
@@ -114,3 +118,6 @@ if st.session_state.get('report_base'):
     except Exception:
         st.warning('PDFを作成できません。テキストは保存できます。')
 
+
+# Read after settlement so the displayed amount includes this request.
+show_balance(balance_slot, config)
