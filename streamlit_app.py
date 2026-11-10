@@ -40,6 +40,7 @@ counter_config = load_counter_config(st.secrets)
 st.title('AI Study Helper for AtCoder')
 st.markdown('コードレビューと、アルゴリズム・解答のやさしい解説')
 st.markdown(':red[※ 個人が開発・運営する非公式ツールです。AtCoder株式会社とは一切関係ありません。]')
+st.markdown(':red[※開催中のコンテストで出題されている問題についてのレビュー及び解答生成は禁じます。（ただしAtCoder社が明示的に許可をしている場合を除く）]')
 st.caption('更新版：2026-11-08.1（多言語対応）')
 st.info('各自のAPIキーで利用する公開アプリです。入力したキーの所有者にAPI料金が発生します。')
 with st.expander('データの扱い・利用について'):
