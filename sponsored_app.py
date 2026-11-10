@@ -13,6 +13,7 @@ from public_budget import MODEL, PRICES, YEN_RATE, count_prompt_tokens, run_spon
 st.set_page_config(page_title='AI Study Helper for AtCoder — 公開版', page_icon='📘')
 st.title('AI Study Helper for AtCoder')
 st.markdown(':red[※ 個人が開発・運営する非公式ツールです。AtCoder株式会社とは一切関係ありません。]')
+st.markdown(':red[※開催中のコンテストで出題されている問題についてのレビュー及び解答生成は禁じます。（ただしAtCoder社が明示的に許可をしている場合を除く）]')
 st.write('APIキー不要の公開版')
 st.write('コードレビューと、アルゴリズム・解答のやさしい解説')
 st.info(f'{MODEL} ／ 思考の深さ high（固定）。利用者への請求はありません。月の利用枠がなくなると翌月まで受付を停止します。')
