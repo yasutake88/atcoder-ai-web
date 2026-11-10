@@ -62,7 +62,20 @@ with st.expander('管理者本人として利用する場合'):
     st.caption('累計の分類にのみ使用します。管理者の実行も公開版の予算に含めます。')
 consent = st.checkbox('問題文・コードをGoogleのAIに送信することに同意する')
 pending = st.session_state.get('pending_settlement')
-if st.button('実行する', type='primary', disabled=not (ready and consent) or bool(pending)):
+execute_requested = st.button('実行する', type='primary', disabled=not (ready and consent) or bool(pending))
+st.write('')
+st.markdown("""
+管理者：**yasutake88**
+
+本アプリのソースコードはGitHubで公開しています。  
+[https://github.com/yasutake88/atcoder-ai-web](https://github.com/yasutake88/atcoder-ai-web)
+
+本アプリの利用・再配布・改変にあたり、管理者への事前連絡や個別の許可は不要です。ただし、公開リポジトリのライセンス条件に従ってください。
+
+本アプリの利用・再配布・改変により生じたいかなる損害についても、法令で認められる範囲において、管理者は責任を負いません。
+""")
+
+if execute_requested:
     started = time.perf_counter()
     try:
         owner = classify(admin, config)
