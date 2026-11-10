@@ -3,7 +3,7 @@ begin;
 create table if not exists public.sponsored_settings (
  singleton boolean primary key default true check(singleton),
  enabled boolean not null default true,
- monthly_micro_usd bigint not null default 5000000 check(monthly_micro_usd between 0 and 5000000)
+ monthly_micro_usd bigint not null default 6250000 check(monthly_micro_usd between 0 and 6250000)
 );
 insert into public.sponsored_settings(singleton) values(true) on conflict do nothing;
 create table if not exists public.sponsored_months (
@@ -76,7 +76,7 @@ revoke all on function public.settle_sponsored_request(uuid,bigint,boolean) from
 grant execute on function public.reserve_sponsored_request(uuid,boolean) to service_role;
 grant execute on function public.settle_sponsored_request(uuid,bigint,boolean) to service_role;
 create or replace function public.get_sponsored_balance()
-returns jsonb language sql stable security definer set search_path = '' as $
+returns jsonb language sql stable security definer set search_path = '' as $$
  select jsonb_build_object(
    'month', to_char(date_trunc('month', now() at time zone 'Asia/Tokyo'), 'YYYY-MM'),
    'monthly_micro_usd', s.monthly_micro_usd,
@@ -87,7 +87,7 @@ returns jsonb language sql stable security definer set search_path = '' as $
  left join public.sponsored_months m
    on m.month = date_trunc('month', now() at time zone 'Asia/Tokyo')::date
  where s.singleton = true;
-$;
+$$;
 revoke all on function public.get_sponsored_balance() from public, anon, authenticated;
 grant execute on function public.get_sponsored_balance() to service_role;
 commit;
