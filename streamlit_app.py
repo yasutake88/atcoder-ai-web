@@ -138,7 +138,20 @@ if not configured(counter_config):
     st.info('累計回数は準備中です。管理者が保存先と確認コードを設定すると記録を開始します。AIの利用と円換算はできます。')
 
 consent = st.checkbox('このキーへの課金と、問題文・コードを選択したAIへ送信することに同意する')
-if st.button('実行する', type='primary', disabled=not consent):
+execute_requested = st.button('実行する', type='primary', disabled=not consent)
+st.write('')
+st.markdown("""
+管理者：**yasutake88**
+
+本アプリのソースコードはGitHubで公開しています。  
+[https://github.com/yasutake88/atcoder-ai-web](https://github.com/yasutake88/atcoder-ai-web)
+
+本アプリの利用・再配布・改変にあたり、管理者への事前連絡や個別の許可は不要です。ただし、公開リポジトリのライセンス条件に従ってください。
+
+本アプリの利用・再配布・改変により生じたいかなる損害についても、法令で認められる範囲において、管理者は責任を負いません。
+""")
+
+if execute_requested:
     key = st.session_state.get('api_key', '').strip()
     identity_error = ''
     try:
