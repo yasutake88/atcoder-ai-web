@@ -20,7 +20,7 @@ def balance_text(data):
     if not data['enabled']:
         message += '\n現在、受付を停止しています。'
     elif remaining < RESERVATION_MICRO_USD:
-        message += '\n次の1回に必要な確保額（25.60円）に満たないため、今月の新規受付は終了しています。'
+        message += '\n次の1回に必要な確保額（51.20円）に満たないため、今月の新規受付は終了しています。'
     return message
 
 

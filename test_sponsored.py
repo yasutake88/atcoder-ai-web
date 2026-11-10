@@ -2,17 +2,24 @@ import unittest
 from datetime import date
 from types import SimpleNamespace
 from unittest.mock import Mock
-from public_budget import run_sponsored, actual_micro_usd, OUTPUT_LIMIT
+from public_budget import run_sponsored, actual_micro_usd, OUTPUT_LIMIT, INPUT_LIMIT, RESERVATION_MICRO_USD
 
 class SponsoredTests(unittest.TestCase):
     def setUp(self):
         self.config = dict(admin_code='dummy', url='https://test.supabase.co', key='sb_secret_test')
         self.count = Mock(return_value=1000)
         self.generate = Mock(return_value=('answer', None, True))
-        self.rpc = Mock(return_value={'allowed': True})
+        self.rpc = Mock(return_value={'allowed': True, 'reserved_micro_usd': 320000})
     def run_request(self, **kwargs):
         return run_sponsored(self.config, 'test-key', 'problem', False,
             self.count, self.generate, rpc_call=self.rpc, today=date(2026,11,8), **kwargs)
+    def test_reservation_covers_maximum(self):
+        self.assertEqual(OUTPUT_LIMIT, 32768)
+        self.assertGreaterEqual(RESERVATION_MICRO_USD, INPUT_LIMIT * 1.5 + OUTPUT_LIMIT * 7.5)
+    def test_old_reservation_cannot_generate(self):
+        self.rpc.return_value = {'allowed': True, 'reserved_micro_usd': 160000}
+        with self.assertRaises(ValueError): self.run_request()
+        self.generate.assert_not_called()
     def test_high_fixed(self):
         answer, usage, pending = self.run_request()
         self.assertEqual(self.generate.call_args.args[4:6], ('high', OUTPUT_LIMIT))

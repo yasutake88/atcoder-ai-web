@@ -5,11 +5,11 @@ from uuid import uuid4
 from counter import configured
 
 MODEL = 'gemini-3.8-flash'
-OUTPUT_LIMIT = 16384
+OUTPUT_LIMIT = 32768
 INPUT_LIMIT = 20000
 # Conservative, undiscounted USD/1M rates. Effective introductory fees may be lower.
 PRICES = (1.5, 0.15, 7.5)
-RESERVATION_MICRO_USD = 160000
+RESERVATION_MICRO_USD = 320000
 YEN_RATE = 160
 PRICE_REVIEW_DEADLINE = date(2027, 1, 31)
 
@@ -52,7 +52,7 @@ def run_sponsored(config, key, prompt, owner, count_tokens, generate, *, today=N
     if type(tokens) is not int or not 0 < tokens <= INPUT_LIMIT:
         raise ValueError('問題文とコードは合計20,000入力トークン以内にしてください。')
     request_id = str(uuid4())
-    reservation = rpc_call(config, 'reserve_sponsored_request',
+    reservation = rpc_call(config, 'reserve_sponsored_request_v2',
                            {'p_request_id': request_id, 'p_is_owner': bool(owner)})
     if reservation.get('allowed') is not True:
         reason = reservation.get('reason')
@@ -60,6 +60,8 @@ def run_sponsored(config, key, prompt, owner, count_tokens, generate, *, today=N
                     'busy': 'ただいま依頼が集中しています。少し時間をおいてください。',
                     'disabled': '公開版は現在受付を停止しています。'}
         raise ValueError(messages.get(reason, '依頼を受け付けられませんでした。'))
+    if reservation.get('reserved_micro_usd') != RESERVATION_MICRO_USD:
+        raise ValueError('予算確保額を確認できません。AIには送信していません。')
     answer, usage, completed = generate('Gemini', MODEL, key, prompt, 'high', OUTPUT_LIMIT, with_status=True)
     # A generation exception leaves the reservation intact, including timeouts.
     return answer.replace(key, '[非表示]'), usage, {
